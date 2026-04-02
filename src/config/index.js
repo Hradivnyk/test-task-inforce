@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET'];
 
+// eslint-disable-next-line security/detect-object-injection
 const missingVars = requiredEnvVars.filter((key) => !process.env[key]);
 
 if (missingVars.length > 0) {
