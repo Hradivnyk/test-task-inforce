@@ -1,5 +1,17 @@
 import 'dotenv/config';
 
+const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET'];
+
+const missingVars = requiredEnvVars.filter((key) => !process.env[key]);
+
+if (missingVars.length > 0) {
+  // eslint-disable-next-line no-console
+  console.error(
+    `Missing required environment variables: ${missingVars.join(', ')}`,
+  );
+  process.exit(1);
+}
+
 const config = {
   server: {
     port: process.env.PORT || 3000,
