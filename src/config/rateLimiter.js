@@ -1,29 +1,36 @@
 import rateLimit from 'express-rate-limit';
+import config from './index.js';
+
+const createLimiter = (options) => {
+  // In production, this is an actual limit; otherwise, it simply skips it
+  if (!config.server.isProd) return (req, res, next) => next();
+  return rateLimit(options);
+};
 
 // Global rate limit for all requests
-export const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // maximum 100 requests
-  standardHeaders: true, // add RateLimit-* headers
-  legacyHeaders: false, // disable old X-RateLimit-* headers
+export const globalLimiter = createLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     error: 'Too many requests, please try again later.',
   },
 });
 
 // Strict rate limit for authentication — protection from brute force
-export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // only 10 attempts
+export const authLimiter = createLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
   message: {
     error: 'Too many login attempts, please try again after 15 minutes.',
   },
 });
 
 // Public API rate limit
-export const apiLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 30, // 30 requests per minute
+export const apiLimiter = createLimiter({
+  windowMs: 60 * 1000,
+  max: 30,
   message: {
     error: 'API rate limit exceeded.',
   },

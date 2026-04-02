@@ -43,6 +43,11 @@ export default [
   },
   {
     files: ['tests/**/*.js', '**/*.test.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
     rules: {
       'no-console': 'off',
       'node/no-missing-import': 'off',
