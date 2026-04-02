@@ -1,11 +1,18 @@
 import { Router } from 'express';
 import { authLimiter } from '../config/rateLimiter.js';
 import * as authController from '../controllers/auth.controller.js';
+import { signupSchema, loginSchema } from '../validators/auth.validator.js';
+import validate from '../utils/validate.js';
 
 const router = Router();
 
-router.post('/login', authLimiter, authController.login);
+router.post('/login', authLimiter, validate(loginSchema), authController.login);
 
-router.post('/signup', authLimiter, authController.signup);
+router.post(
+  '/signup',
+  authLimiter,
+  validate(signupSchema),
+  authController.signup,
+);
 
 export default router;
