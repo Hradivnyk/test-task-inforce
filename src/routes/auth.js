@@ -27,5 +27,4 @@ router.get('/books/:id', (req, res) => {
   res.json({ message: 'Book route' });
 });
 
-
 export default router;

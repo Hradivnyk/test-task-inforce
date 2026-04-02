@@ -1,0 +1,20 @@
+import pino from 'pino';
+import config from '../config/index.js';
+
+const logger = pino({
+  level: config.server.isProd ? 'info' : 'debug',
+
+  // pino-pretty only in development — in production clean JSON
+  transport: config.server.isDev
+    ? {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'SYS:HH:MM:ss',
+          ignore: 'pid,hostname',
+        },
+      }
+    : undefined,
+});
+
+export default logger;

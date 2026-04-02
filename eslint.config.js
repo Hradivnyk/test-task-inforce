@@ -1,9 +1,8 @@
 import js from '@eslint/js';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
-import nodePlugin from 'eslint-plugin-node';
+import nodePlugin from 'eslint-plugin-n';
 import securityPlugin from 'eslint-plugin-security';
-import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 
 export default [
@@ -14,7 +13,6 @@ export default [
       prettier: prettierPlugin,
       node: nodePlugin,
       security: securityPlugin,
-      import: importPlugin,
     },
 
     languageOptions: {
@@ -38,14 +36,10 @@ export default [
       'require-await': 'error',
       'node/no-deprecated-api': 'error',
       'node/no-missing-import': 'error',
-      'node/no-extraneous-dependencies': 'error',
       'security/detect-object-injection': 'warn',
       'security/detect-non-literal-regexp': 'warn',
       'security/detect-non-literal-fs-filename': 'warn',
-      'security/detect-eval-with-expression': 'error',
-      'import/no-duplicates': 'error',
-      'import/first': 'error',
-      'import/no-cycle': 'warn',
+      'security/detect-eval-with-expression': 'error'
     },
   },
   {
