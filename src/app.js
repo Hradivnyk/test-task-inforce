@@ -9,6 +9,10 @@ import pinoHttp from 'pino-http';
 import logger from './utils/logger.js';
 import errorHandler from './middlewares/errorHandler.js';
 
+import authRouter from './routes/auth.routes.js';
+import bookRouter from './routes/book.routes.js';
+import userRouter from './routes/user.routes.js';
+
 const app = express();
 
 // HTTP header protection
@@ -27,6 +31,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' });
+});
+
+app.use('/api/auth', authRouter);
+app.use('/api/books', bookRouter);
+app.use('/api/users', userRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ error: { message: 'Route not found' } });
 });
 
 app.use(errorHandler);
