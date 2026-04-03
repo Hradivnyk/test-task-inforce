@@ -8,7 +8,7 @@ describe('POST /api/auth/signup', () => {
     password: 'password123',
   };
 
-  it('successful registration — returns 201 and token', async () => {
+  it('successful registration - returns 201 and token', async () => {
     const res = await request(app).post('/api/auth/signup').send(validUser);
 
     expect(res.status).toBe(201);
@@ -17,7 +17,7 @@ describe('POST /api/auth/signup', () => {
     expect(res.body.user.password).toBeUndefined(); // password is not returned
   });
 
-  it('error — email already exists', async () => {
+  it('error - email already exists', async () => {
     await request(app).post('/api/auth/signup').send(validUser);
 
     const res = await request(app).post('/api/auth/signup').send(validUser);
@@ -26,13 +26,38 @@ describe('POST /api/auth/signup', () => {
     expect(res.body.error.message).toBe('Email already in use');
   });
 
-  it('error — invalid data', async () => {
+  it('error - missing name', async () => {
     const res = await request(app)
       .post('/api/auth/signup')
-      .send({ email: 'bad-email', password: '123' });
+      .send({ email: 'john@example.com', password: 'password123' });
 
     expect(res.status).toBe(400);
     expect(res.body.errors).toBeDefined();
+  });
+
+  it('error - invalid email', async () => {
+    const res = await request(app)
+      .post('/api/auth/signup')
+      .send({ ...validUser, email: 'not-an-email' });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('error - password too short', async () => {
+    const res = await request(app)
+      .post('/api/auth/signup')
+      .send({ ...validUser, password: '123' });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('can register as admin', async () => {
+    const res = await request(app)
+      .post('/api/auth/signup')
+      .send({ ...validUser, role: 'admin' });
+
+    expect(res.status).toBe(201);
+    expect(res.body.user.role).toBe('admin');
   });
 });
 
@@ -45,7 +70,7 @@ describe('POST /api/auth/login', () => {
     });
   });
 
-  it('successful login — returns 200 and token', async () => {
+  it('successful login - returns 200 and token', async () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'john@example.com', password: 'password123' });
@@ -54,7 +79,7 @@ describe('POST /api/auth/login', () => {
     expect(res.body.token).toBeDefined();
   });
 
-  it('error — incorrect password', async () => {
+  it('error - incorrect password', async () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'john@example.com', password: 'wrongpassword' });
@@ -63,11 +88,27 @@ describe('POST /api/auth/login', () => {
     expect(res.body.error.message).toBe('Invalid email or password');
   });
 
-  it('error — email does not exist', async () => {
+  it('error - email does not exist', async () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'nobody@example.com', password: 'password123' });
 
     expect(res.status).toBe(401);
+  });
+
+  it('error - missing email', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ password: 'password123' });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('error - missing password', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'john@example.com' });
+
+    expect(res.status).toBe(400);
   });
 });

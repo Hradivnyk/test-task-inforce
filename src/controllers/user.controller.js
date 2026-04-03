@@ -4,7 +4,7 @@ import * as userService from '../services/user.service.js';
 export const getUsers = catchAsync(async (req, res) => {
   const { users } = await userService.getUsers(req.body);
 
-  res.status(201).json({
+  res.status(200).json({
     users,
   });
 });

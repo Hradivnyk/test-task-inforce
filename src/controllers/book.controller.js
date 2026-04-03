@@ -4,7 +4,7 @@ import * as bookService from '../services/book.service.js';
 export const getBooks = catchAsync(async (req, res) => {
   const { books } = await bookService.getBooks(req.body);
 
-  res.status(201).json({
+  res.status(200).json({
     books,
   });
 });
