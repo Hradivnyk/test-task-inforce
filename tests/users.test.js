@@ -331,8 +331,7 @@ describe('DELETE /api/users/:id', () => {
       .delete(`/api/users/${userId}`)
       .set('Authorization', `Bearer ${adminToken}`);
 
-    expect(res.status).toBe(200);
-    expect(res.body.user._id).toBe(userId);
+    expect(res.status).toBe(204);
 
     const getRes = await request(app)
       .get(`/api/users/${userId}`)

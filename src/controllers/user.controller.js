@@ -2,10 +2,11 @@ import catchAsync from '../utils/catchAsync.js';
 import * as userService from '../services/user.service.js';
 
 export const getUsers = catchAsync(async (req, res) => {
-  const { users } = await userService.getUsers(req.body);
+  const { users, total, page, limit } = await userService.getUsers(req.query);
 
   res.status(200).json({
     users,
+    pagination: { total, page, limit },
   });
 });
 
@@ -34,9 +35,7 @@ export const updateUser = catchAsync(async (req, res) => {
 });
 
 export const deleteUser = catchAsync(async (req, res) => {
-  const { user } = await userService.deleteUser(req.params.id);
+  await userService.deleteUser(req.params.id);
 
-  res.status(200).json({
-    user,
-  });
+  res.status(204).send();
 });

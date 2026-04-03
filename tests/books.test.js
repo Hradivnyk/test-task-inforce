@@ -281,8 +281,7 @@ describe('DELETE /api/books/:id', () => {
       .delete(`/api/books/${bookId}`)
       .set('Authorization', `Bearer ${adminToken}`);
 
-    expect(res.status).toBe(200);
-    expect(res.body.book._id).toBe(bookId);
+    expect(res.status).toBe(204);
 
     const getRes = await request(app)
       .get(`/api/books/${bookId}`)

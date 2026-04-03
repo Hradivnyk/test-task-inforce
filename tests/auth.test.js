@@ -23,7 +23,7 @@ describe('POST /api/auth/signup', () => {
     const res = await request(app).post('/api/auth/signup').send(validUser);
 
     expect(res.status).toBe(409);
-    expect(res.body.error.message).toBe('Email already in use');
+    expect(res.body.error.message).toBe('email already in use');
   });
 
   it('error - missing name', async () => {

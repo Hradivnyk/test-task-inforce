@@ -2,10 +2,11 @@ import catchAsync from '../utils/catchAsync.js';
 import * as bookService from '../services/book.service.js';
 
 export const getBooks = catchAsync(async (req, res) => {
-  const { books } = await bookService.getBooks(req.body);
+  const { books, total, page, limit } = await bookService.getBooks(req.query);
 
   res.status(200).json({
     books,
+    pagination: { total, page, limit },
   });
 });
 
@@ -34,9 +35,7 @@ export const updateBook = catchAsync(async (req, res) => {
 });
 
 export const deleteBook = catchAsync(async (req, res) => {
-  const { book } = await bookService.deleteBook(req.params.id);
+  await bookService.deleteBook(req.params.id);
 
-  res.status(200).json({
-    book,
-  });
+  res.status(204).send();
 });

@@ -1,39 +1,22 @@
-import mongoose from 'mongoose';
 import User from '../models/user.model.js';
+import { assertValidObjectId, mapMongooseError } from '../utils/mongoUtils.js';
 import AppError from '../utils/AppError.js';
 
-const assertValidId = (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new AppError('Invalid user id', 400);
-  }
-};
+export const getUsers = async ({ page = 1, limit = 20 } = {}) => {
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+  const skip = (pageNum - 1) * limitNum;
 
-const mapMongooseError = (err) => {
-  if (err instanceof AppError) return err;
+  const [users, total] = await Promise.all([
+    User.find().skip(skip).limit(limitNum),
+    User.countDocuments(),
+  ]);
 
-  if (err?.code === 11000) {
-    const field = Object.keys(err.keyPattern)[0];
-    return new AppError(`${field} already in use`, 409);
-  }
-
-  if (err?.name === 'ValidationError') {
-    return new AppError(err.message || 'User validation error', 400);
-  }
-
-  if (err?.name === 'CastError') {
-    return new AppError('Invalid user id', 400);
-  }
-
-  return err;
-};
-
-export const getUsers = async () => {
-  const users = await User.find();
-  return { users };
+  return { users, total, page: pageNum, limit: limitNum };
 };
 
 export const getUserById = async (id) => {
-  assertValidId(id);
+  assertValidObjectId(id, 'user');
 
   const user = await User.findById(id);
   if (!user) throw new AppError('User not found', 404);
@@ -51,7 +34,7 @@ export const createUser = async (data) => {
 };
 
 export const updateUser = async (id, data) => {
-  assertValidId(id);
+  assertValidObjectId(id, 'user');
 
   try {
     const user = await User.findById(id).select('+password');
@@ -67,7 +50,7 @@ export const updateUser = async (id, data) => {
 };
 
 export const deleteUser = async (id) => {
-  assertValidId(id);
+  assertValidObjectId(id, 'user');
 
   try {
     const user = await User.findByIdAndDelete(id);

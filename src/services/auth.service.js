@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
 import AppError from '../utils/AppError.js';
+import { mapMongooseError } from '../utils/mongoUtils.js';
 import config from '../config/index.js';
 
 const generateToken = (userId) => {
@@ -10,13 +11,14 @@ const generateToken = (userId) => {
 };
 
 export const signup = async (data) => {
-  const existingUser = await User.findOne({ email: data.email });
-  if (existingUser) throw new AppError('Email already in use', 409);
+  try {
+    const user = await User.create(data);
+    const token = generateToken(user._id);
 
-  const user = await User.create(data);
-  const token = generateToken(user._id);
-
-  return { user, token };
+    return { user, token };
+  } catch (err) {
+    throw mapMongooseError(err);
+  }
 };
 
 export const login = async ({ email, password }) => {

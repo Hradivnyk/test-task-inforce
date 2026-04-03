@@ -1,32 +1,22 @@
-import mongoose from 'mongoose';
 import Book from '../models/book.model.js';
+import { assertValidObjectId, mapMongooseError } from '../utils/mongoUtils.js';
 import AppError from '../utils/AppError.js';
 
-const assertValidId = (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new AppError('Invalid book id', 400);
-  }
-};
+export const getBooks = async ({ page = 1, limit = 20 } = {}) => {
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+  const skip = (pageNum - 1) * limitNum;
 
-const mapMongooseError = (err) => {
-  if (err?.name === 'ValidationError') {
-    return new AppError(err.message || 'Book validation error', 400);
-  }
+  const [books, total] = await Promise.all([
+    Book.find().skip(skip).limit(limitNum),
+    Book.countDocuments(),
+  ]);
 
-  if (err?.name === 'CastError') {
-    return new AppError('Invalid book id', 400);
-  }
-
-  return err;
-};
-
-export const getBooks = async () => {
-  const books = await Book.find();
-  return { books };
+  return { books, total, page: pageNum, limit: limitNum };
 };
 
 export const getBookById = async (id) => {
-  assertValidId(id);
+  assertValidObjectId(id, 'book');
 
   const book = await Book.findById(id);
   if (!book) throw new AppError('Book not found', 404);
@@ -44,7 +34,7 @@ export const createBook = async (data) => {
 };
 
 export const updateBook = async (id, data) => {
-  assertValidId(id);
+  assertValidObjectId(id, 'book');
 
   try {
     const book = await Book.findById(id);
@@ -60,7 +50,7 @@ export const updateBook = async (id, data) => {
 };
 
 export const deleteBook = async (id) => {
-  assertValidId(id);
+  assertValidObjectId(id, 'book');
 
   try {
     const book = await Book.findByIdAndDelete(id);
