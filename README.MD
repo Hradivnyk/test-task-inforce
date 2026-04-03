@@ -2,6 +2,36 @@
 
 REST API built with Node.js and Express for managing books and users, featuring JWT authentication and role-based access control.
 
+## Demo
+
+> **Live demo:** `https://inforce-task.stashohulia.dev/`
+
+## API Documentation (Swagger)
+
+Swagger UI is available at:
+
+```
+https://inforce-task.stashohulia.dev/api/docs
+```
+
+The OpenAPI spec is defined in `src/docs/swagger.yaml`.
+
+In local environment: `http://localhost:3000/api/docs`
+
+## CI/CD
+
+The project uses **GitHub Actions** to automatically deploy changes to **AWS EC2** on every push to the `main` branch.
+
+The workflow (`.github/workflows/deploy.yml`) connects to the EC2 instance via SSH, pulls the latest code, installs dependencies, and restarts the application using **PM2**.
+
+Required GitHub repository secrets:
+
+| Secret | Description |
+|---|---|
+| `EC2_HOST` | EC2 instance public IP or hostname |
+| `EC2_USER` | SSH username (e.g. `ubuntu`, `ec2-user`) |
+| `EC2_SSH_KEY` | Private SSH key for the EC2 instance |
+
 ## Tech Stack
 
 - **Runtime:** Node.js (ESM — `"type": "module"`)
@@ -89,16 +119,6 @@ npm start
 | DELETE | `/api/users/:id` | Delete a user |
 
 All authenticated endpoints require a `Bearer` token in the `Authorization` header.
-
-## API Documentation (Swagger)
-
-Swagger UI is available in non-production environments at:
-
-```
-http://localhost:3000/api/docs
-```
-
-The OpenAPI spec is defined in `src/docs/swagger.yaml`.
 
 ## Testing
 
