@@ -54,7 +54,7 @@ export const updateUser = async (id, data) => {
   assertValidId(id);
 
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).select('+password');
     if (!user) throw new AppError('User not found', 404);
 
     user.set(data);
