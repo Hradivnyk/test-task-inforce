@@ -35,7 +35,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.send(renderMarkdown('../../README.md', 'Inforce API'));
+  res.send(renderMarkdown('Inforce API'));
 });
 
 if (!config.server.isProd) {
