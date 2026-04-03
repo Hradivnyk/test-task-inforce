@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/YOUR_REPO
+            cd ~/test-task-inforce
 
             # Get the latest updates
             git pull origin main
