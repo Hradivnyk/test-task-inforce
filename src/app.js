@@ -41,7 +41,9 @@ if (!config.server.isProd) {
   app.use(
     '/api/docs',
     swaggerUi.serveFiles(swaggerSpec),
-    swaggerUi.setup(swaggerSpec),
+    swaggerUi.setup(swaggerSpec, {
+      swaggerOptions: { persistAuthorization: true },
+    }),
   );
 }
 
