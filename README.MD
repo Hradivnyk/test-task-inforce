@@ -4,19 +4,16 @@ REST API built with Node.js and Express for managing books and users, featuring 
 
 ## Demo
 
-> **Live demo:** `https://inforce-task.stashohulia.dev/`
+**Live demo:** [https://inforce-task.stashohulia.dev/](https://inforce-task.stashohulia.dev/)
 
 ## API Documentation (Swagger)
 
-Swagger UI is available at:
+Swagger UI is available at: [https://inforce-task.stashohulia.dev/api/docs](https://inforce-task.stashohulia.dev/api/docs)
 
-```
-https://inforce-task.stashohulia.dev/api/docs
-```
 
 The OpenAPI spec is defined in `src/docs/swagger.yaml`.
 
-In local environment: `http://localhost:3000/api/docs`
+In local environment: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 
 ## CI/CD
 

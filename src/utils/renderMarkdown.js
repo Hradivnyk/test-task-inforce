@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { marked } from 'marked';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -48,21 +48,21 @@ const getStyles = () => `
   </style>
 `;
 
-const wrapHtml = (title, content) => `
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="robots" content="noindex, nofollow" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>${title}</title>
-      ${getStyles()}
-    </head>
-    <body>
-      ${content}
-    </body>
-  </html>
-`;
+const wrapHtml = (title, content) =>
+  `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>${title}</title>
+    ${getStyles()}
+  </head>
+  <body>
+    ${content}
+  </body>
+</html>`;
 
 const ROOT_DIR = join(__dirname, '..', '..');
 

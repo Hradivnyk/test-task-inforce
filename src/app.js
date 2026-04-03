@@ -1,8 +1,11 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import config from './config/index.js';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 import corsOptions from './config/cors.js';
 import { globalLimiter } from './config/rateLimiter.js';
 
@@ -22,6 +25,8 @@ const app = express();
 
 app.set('trust proxy', 1); // trust the first proxy (Nginx)
 
+app.use(express.static(join(__dirname, '../public')));
+
 // HTTP header protection
 app.use(helmet());
 // CORS configured
@@ -38,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.set('X-Robots-Tag', 'noindex, nofollow');
-  res.send(renderMarkdown('Inforce API'));
+  res.send(renderMarkdown('Inforce Test Task'));
 });
 
 app.get('/robots.txt', (req, res) => {
