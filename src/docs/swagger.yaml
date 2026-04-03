@@ -5,6 +5,8 @@ info:
   description: REST API with authentication, book management, and user management.
 
 servers:
+  - url: https://inforce-task.stashohulia.dev/api
+    description: Production
   - url: http://localhost:3000
     description: Local development server
 
