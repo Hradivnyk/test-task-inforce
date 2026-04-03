@@ -8,6 +8,7 @@ import { globalLimiter } from './config/rateLimiter.js';
 
 import pinoHttp from 'pino-http';
 import logger from './utils/logger.js';
+import { renderMarkdown } from './utils/renderMarkdown.js';
 import errorHandler from './middlewares/errorHandler.js';
 
 import authRouter from './routes/auth.routes.js';
@@ -34,7 +35,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello World!' });
+  res.send(renderMarkdown('../../README.md', 'Inforce API'));
 });
 
 if (!config.server.isProd) {
