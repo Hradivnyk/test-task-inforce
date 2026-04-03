@@ -40,15 +40,13 @@ app.get('/', (req, res) => {
   res.send(renderMarkdown('Inforce API'));
 });
 
-if (!config.server.isProd) {
-  app.use(
-    '/api/docs',
-    swaggerUi.serveFiles(swaggerSpec),
-    swaggerUi.setup(swaggerSpec, {
-      swaggerOptions: { persistAuthorization: true },
-    }),
-  );
-}
+app.use(
+  '/api/docs',
+  swaggerUi.serveFiles(swaggerSpec),
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: { persistAuthorization: true },
+  }),
+);
 
 app.use('/api/auth', authRouter);
 app.use('/api/books', bookRouter);
