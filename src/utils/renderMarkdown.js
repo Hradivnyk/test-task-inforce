@@ -66,7 +66,7 @@ const wrapHtml = (title, content) => `
 const ROOT_DIR = join(__dirname, '..', '..');
 
 export const renderMarkdown = (title = 'Inforce API') => {
-  const markdown = readFileSync(join(ROOT_DIR, 'README.md'), 'utf8');
+  const markdown = readFileSync(join(ROOT_DIR, 'README.MD'), 'utf8');
   const html = marked(markdown);
   return wrapHtml(title, html);
 };

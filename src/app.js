@@ -20,6 +20,8 @@ import { swaggerSpec } from './config/swagger.js';
 
 const app = express();
 
+app.set('trust proxy', 1); // trust the first proxy (Nginx)
+
 // HTTP header protection
 app.use(helmet());
 // CORS configured
