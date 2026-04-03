@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 
+import config from './config/index.js';
 import corsOptions from './config/cors.js';
 import { globalLimiter } from './config/rateLimiter.js';
 
@@ -12,6 +13,9 @@ import errorHandler from './middlewares/errorHandler.js';
 import authRouter from './routes/auth.routes.js';
 import bookRouter from './routes/book.routes.js';
 import userRouter from './routes/user.routes.js';
+
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger.js';
 
 const app = express();
 
@@ -32,6 +36,14 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' });
 });
+
+if (!config.server.isProd) {
+  app.use(
+    '/api/docs',
+    swaggerUi.serveFiles(swaggerSpec),
+    swaggerUi.setup(swaggerSpec),
+  );
+}
 
 app.use('/api/auth', authRouter);
 app.use('/api/books', bookRouter);
